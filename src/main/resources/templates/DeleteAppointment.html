@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Appointment</title>
+    <script>
+        // Corrected the deleteAppointment function
+        function deleteAppointment(event) {
+            event.preventDefault(); // Prevent form submission which causes a page reload
+
+            const appointmentId = document.getElementById('appointmentId').value;
+            const url = 'http://localhost:8080/appointments/' + appointmentId; // Constructed URL outside fetch
+
+            fetch(url, {
+                method: 'DELETE',
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to delete the appointment: ' + response.statusText);
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    alert('Appointment deleted successfully!'); // Provide a more user-friendly message
+                    console.log(data); // Optionally log server response data to console for debugging
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    alert(error.message); // Display error message to the user
+                });
+        }
+    </script>
+</head>
+<body>
+<form onsubmit="deleteAppointment(event)">
+    <label for="appointmentId">Appointment ID:</label><br>
+    <input type="number" id="appointmentId" name="appointmentId" required><br>
+    <input type="submit" value="Delete Appointment">
+</form>
+</body>
+</html>
